@@ -10,7 +10,8 @@ int main() {
   }
 
   // Create the window where we will draw.
-  window = SDL_CreateWindow(NULL, 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP);
+  window = SDL_CreateWindow(NULL, 0, 0, 640, (int)(1080 / 0.8),
+                            SDL_WINDOW_BORDERLESS);
 
   // We must call SDL_CreateRenderer in order for draw calls to affect this
   // window.
