@@ -7,6 +7,7 @@ static char prec[128] =
 	['-'] = 1,
 	['*'] = 2,
 	['/'] = 2,
+	['$'] = 3, // unary negation
 };
 
 Queue convert_to_RPN(Token *tokens, int len)
@@ -32,6 +33,12 @@ Queue convert_to_RPN(Token *tokens, int len)
 				push(&output, pop(&ops));
 			pop(&ops);
 			break;
+
+		case UNARY_OP:
+			token.kind = NUM_LITERAL, token.value = -1;
+			push(&output, token);
+			token.kind = OPERATOR, token.value = '$';
+			// fallthrough;
 
 		case OPERATOR:
 			while (ops.len && peek(&ops).kind != LEFT_PAREN
@@ -63,15 +70,16 @@ int eval(Queue *tokens)
 	if (token.kind == NUM_LITERAL)
 		return token.value;
 
-	int B = eval(tokens);
 	int A = eval(tokens);
+	int B = eval(tokens);
 
 	switch (token.value)
 	{
-		case '+': return A + B;
-		case '-': return A - B;
-		case '*': return A * B;
-		case '/': return A / B;
+		case '+': return B + A;
+		case '-': return B - A;
+		case '$': return B * A;
+		case '*': return B * A;
+		case '/': return B / A;
 	}
 
 	puts("[ERROR]");

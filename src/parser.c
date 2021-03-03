@@ -1,8 +1,9 @@
+#include <stdio.h>
 #include "parser.h"
 
 void trim(const char **src)
 {
-	for (; **src == ' '; (*src)++);
+	while (**src == ' ')(*src)++;
 }
 
 int parse_number(const char *src, const char **end)
@@ -62,4 +63,107 @@ Token parse_token(const char *src, const char **end)
 	*end = src;
 
 	return token;
+}
+
+void scan_for_errors(Token *tokens, int len)
+{
+	if (len == 0)
+	{
+		puts("[ERROR] empty expression");
+		for(;;);
+	}
+
+	int parens = 0;
+
+	for (int i = 0; i<len; i++)
+	{
+		Token token = tokens[i];
+
+		switch (token.kind)
+		{
+		case LEFT_PAREN:
+			parens++;
+			break;
+
+		case RIGHT_PAREN:
+			parens--;
+			if (parens < 0)
+			{
+				puts("[ERROR] mismatched )");
+				for(;;);
+			}
+			break;
+		}
+	}
+
+	if (parens != 0)
+	{
+		puts("[ERROR] mismatched (");
+		for(;;);
+	}
+
+	if (tokens[0].kind == OPERATOR ||
+	    tokens[0].kind == RIGHT_PAREN)
+	{
+		char value = tokens[0].value ?: ')';
+		printf("[ERROR] expression cannot start with '%c'\n", value);
+		for(;;);
+	}
+
+	if (tokens[len-1].kind == OPERATOR ||
+	    tokens[len-1].kind == LEFT_PAREN)
+	{
+		char value = tokens[len-1].value ?: '(';
+		printf("[ERROR] expression cannot end with '%c'\n", value);
+		for(;;);
+	}
+
+	Token last = {.kind = OPERATOR};
+
+	for (int i = 0; i < len; i++)
+	{
+		Token token = tokens[i];
+		char valid = 0;
+
+		switch (last.kind)
+		{
+		case NUM_LITERAL:
+			valid = token.kind == OPERATOR
+			     || token.kind == RIGHT_PAREN;
+			break;
+
+		case OPERATOR:
+			valid = token.kind == NUM_LITERAL
+			     || token.kind == LEFT_PAREN
+			     || (token.value == '-');
+
+			if (token.value == '-')
+			{
+				token.kind = tokens[i].kind
+					   = UNARY_OP;
+			}
+
+			break;
+
+		case UNARY_OP:
+			valid = token.kind == NUM_LITERAL
+			     || token.kind == LEFT_PAREN;
+			break;
+
+		case LEFT_PAREN:
+			valid = token.kind == NUM_LITERAL;
+			break;
+
+		case RIGHT_PAREN:
+			valid = token.kind == OPERATOR;
+			break;
+		}
+
+		last = token;
+		if (!valid)
+		{
+			puts("[ERROR] unexpected symbol");
+			for(;;);
+		}
+	}
 }
