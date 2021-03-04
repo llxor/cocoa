@@ -25,6 +25,7 @@ int parse_number(const char *src, const char **end)
 	}
 
 	const char *diff = "0W";
+	const char *ref = src;
 
 	while (('0' <= *src && *src <= '9')
 	    || ('a' <= *src && *src <= 'f')
@@ -33,6 +34,12 @@ int parse_number(const char *src, const char **end)
 		char d = *src | 0x20;
 		res = res * base + d - diff[d >= 'a'];
 		src++;
+	}
+
+	if (src == ref)
+	{
+		printf("[ERROR] invalid char '%c'\n", *src);
+		for(;;);
 	}
 
 	*end = src;
