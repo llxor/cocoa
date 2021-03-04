@@ -3,11 +3,11 @@
 
 static char prec[128] =
 {
-	['+'] = 1,
-	['-'] = 1,
-	['*'] = 2,
-	['/'] = 2,
-	['$'] = 3, // unary negation
+	[ADD] = 1,
+	[SUB] = 1,
+	[MUL] = 2,
+	[DIV] = 2,
+	[NEG] = 3,
 };
 
 Queue convert_to_RPN(Token *tokens, int len)
@@ -35,9 +35,9 @@ Queue convert_to_RPN(Token *tokens, int len)
 			break;
 
 		case UNARY_OP:
-			token.kind = NUM_LITERAL, token.value = -1;
+			token.kind = NUM_LITERAL, token.value = 0;
 			push(&output, token);
-			token.kind = OPERATOR, token.value = '$';
+			token.kind = OPERATOR, token.value = NEG;
 			// fallthrough;
 
 		case OPERATOR:
@@ -75,11 +75,11 @@ int eval(Queue *tokens)
 
 	switch (token.value)
 	{
-		case '+': return B + A;
-		case '-': return B - A;
-		case '$': return B * A;
-		case '*': return B * A;
-		case '/': return B / A;
+		case ADD: return B + A;
+		case SUB: return B - A;
+		case MUL: return B * A;
+		case DIV: return B / A;
+		case NEG: return B - A; // multiply by -1
 	}
 
 	puts("[ERROR]");

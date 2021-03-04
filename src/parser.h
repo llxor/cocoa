@@ -9,6 +9,16 @@ enum Token_Type
 	RIGHT_PAREN,
 };
 
+enum Operator
+{
+	NEG,
+
+	ADD = '+',
+	SUB = '-',
+	MUL = '*',
+	DIV = '/',
+};
+
 struct Token
 {
 	int kind, value;

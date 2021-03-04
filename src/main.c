@@ -4,7 +4,7 @@
 
 int main()
 {
-	const char *src = "4 + -5 * (6 + 4) / -2 * 0xff";
+	const char *src = "-4 + -5 * (6 + 4) / -2 * 0xff";
 	const char *original = src;
 
 	Token tokens[100];

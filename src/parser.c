@@ -102,22 +102,6 @@ void scan_for_errors(Token *tokens, int len)
 		for(;;);
 	}
 
-	if (tokens[0].kind == OPERATOR ||
-	    tokens[0].kind == RIGHT_PAREN)
-	{
-		char value = tokens[0].value ?: ')';
-		printf("[ERROR] expression cannot start with '%c'\n", value);
-		for(;;);
-	}
-
-	if (tokens[len-1].kind == OPERATOR ||
-	    tokens[len-1].kind == LEFT_PAREN)
-	{
-		char value = tokens[len-1].value ?: '(';
-		printf("[ERROR] expression cannot end with '%c'\n", value);
-		for(;;);
-	}
-
 	Token last = {.kind = OPERATOR};
 
 	for (int i = 0; i < len; i++)
@@ -141,6 +125,9 @@ void scan_for_errors(Token *tokens, int len)
 			{
 				token.kind = tokens[i].kind
 					   = UNARY_OP;
+
+				token.value = tokens[i].value
+					    = NEG;
 			}
 
 			break;
@@ -165,5 +152,13 @@ void scan_for_errors(Token *tokens, int len)
 			puts("[ERROR] unexpected symbol");
 			for(;;);
 		}
+	}
+
+	if (tokens[len-1].kind == OPERATOR ||
+	    tokens[len-1].kind == LEFT_PAREN)
+	{
+		char value = tokens[len-1].value ?: '(';
+		printf("[ERROR] expression cannot end with '%c'\n", value);
+		for(;;);
 	}
 }
