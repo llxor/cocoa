@@ -62,6 +62,7 @@ Token parse_token(const char *src, const char **end)
 		case '&':
 		case '|':
 		case '^':
+		case '~':
 			token.kind = OPERATOR;
 			token.value = *src;
 			break;
@@ -132,15 +133,20 @@ void scan_for_errors(Token *tokens, int len)
 		case OPERATOR:
 			valid = token.kind == NUM_LITERAL
 			     || token.kind == LEFT_PAREN
-			     || (token.value == '-');
+			     || token.value == '-'
+			     || token.value == '~';
 
-			if (token.value == '-')
+			switch (token.value)
 			{
-				token.kind = tokens[i].kind
-					   = UNARY_OP;
+			case '-':
+				token.kind = tokens[i].kind = UNARY_OP;
+				token.value = tokens[i].value = NEG;
+				break;
 
-				token.value = tokens[i].value
-					    = NEG;
+			case '~':
+				token.kind = tokens[i].kind = UNARY_OP;
+				token.value = tokens[i].value = NOT;
+				break;
 			}
 
 			break;
