@@ -32,7 +32,15 @@ int parse_number(const char *src, const char **end)
 	    || ('A' <= *src && *src <= 'F'))
 	{
 		char d = *src | 0x20;
-		res = res * base + d - diff[d >= 'a'];
+		char r = d - diff[d >= 'a'];
+
+		if (r >= base)
+		{
+			printf("[ERROR] invalid digit '%c' in base-%d integer\n", *src, base);
+			for(;;);
+		}
+
+		res = res * base + r;
 		src++;
 	}
 
