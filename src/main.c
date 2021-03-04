@@ -18,8 +18,7 @@ int main()
 
 	scan_for_errors(tokens, len);
 	Queue RPN = convert_to_RPN(tokens, len);
-	int value = eval(&RPN);
+	printf("%s = %d\n", original, eval(&RPN));
 
-	printf("%s = %d\n", original, value);
 	return 0;
 }
