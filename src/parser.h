@@ -21,7 +21,7 @@ enum Operator
 	MUL = '*',
 	DIV = '/',
 
-	// BITWISE OPERATPRS //
+	// BITWISE OPERATORS //
 	AND = '&',
 	 OR = '|',
 	XOR = '^',
