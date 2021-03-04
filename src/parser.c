@@ -48,7 +48,13 @@ Token parse_token(const char *src, const char **end)
 		case '(': token.kind = LEFT_PAREN;  break;
 		case ')': token.kind = RIGHT_PAREN; break;
 
-		case '+': case '-': case '*': case '/':
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+		case '&':
+		case '|':
+		case '^':
 			token.kind = OPERATOR;
 			token.value = *src;
 			break;

@@ -11,12 +11,20 @@ enum Token_Type
 
 enum Operator
 {
+	// UNARY OPERATORS //
 	NEG,
+	NOT = '~',
 
+	// BINARY OPERATORS //
 	ADD = '+',
 	SUB = '-',
 	MUL = '*',
 	DIV = '/',
+
+	// BITWISE OPERATPRS //
+	AND = '&',
+	 OR = '|',
+	XOR = '^',
 };
 
 struct Token
