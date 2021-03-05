@@ -4,21 +4,34 @@
 
 int main()
 {
-	const char *src = "(~4 + -5 * (6 + 4) / -(2 & 3) * 0xff) % 71";
-	const char *original = src;
+	char buffer[1000] = {0};
 
-	Token tokens[100];
-	int len = 0;
-
-	while (*src != 0)
+	do
 	{
-		tokens[len++] = parse_token(src, &src);
-		trim(&src);
-	}
+		if (fgets(buffer, sizeof buffer, stdin) == NULL)
+		{
+			break;
+		}
 
-	scan_for_errors(tokens, len);
-	Queue RPN = convert_to_RPN(tokens, len);
-	printf("%s = %d\n", original, eval(&RPN));
+		char *end = buffer;
+		while (*end++) *end &= -(*end != '\n');
+
+		Token tokens[100];
+		int len = 0;
+
+		const char *src = buffer;
+
+		while (*src != 0)
+		{
+			tokens[len++] = parse_token(src, &src);
+			trim(&src);
+		}
+
+		scan_for_errors(tokens, len);
+		Queue RPN = convert_to_RPN(tokens, len);
+		printf("%d\n", eval(&RPN));
+	}
+	while(1);
 
 	return 0;
 }
