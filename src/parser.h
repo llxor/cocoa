@@ -20,6 +20,7 @@ enum Operator
 	SUB = '-',
 	MUL = '*',
 	DIV = '/',
+	MOD = '%',
 
 	// BITWISE OPERATORS //
 	AND = '&',

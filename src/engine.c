@@ -11,6 +11,7 @@ static char prec[128] =
 	[SUB] = 2,
 	[MUL] = 3,
 	[DIV] = 3,
+	[MOD] = 3,
 
 	[NEG] = 4,
 	[NOT] = 4,
@@ -100,6 +101,7 @@ int eval(Queue *tokens)
 		case SUB: return B - A;
 		case MUL: return B * A;
 		case DIV: return B / A;
+		case MOD: return B % A;
 
 		case AND: return B & A;
 		case  OR: return B | A;

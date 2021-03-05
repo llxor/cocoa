@@ -67,6 +67,7 @@ Token parse_token(const char *src, const char **end)
 		case '-':
 		case '*':
 		case '/':
+		case '%':
 		case '&':
 		case '|':
 		case '^':
@@ -165,7 +166,26 @@ void scan_for_errors(Token *tokens, int len)
 			break;
 
 		case LEFT_PAREN:
-			valid = token.kind == NUM_LITERAL;
+			valid = token.kind == NUM_LITERAL
+			     || token.value == '-'
+			     || token.value == '~';
+
+			if (token.kind == OPERATOR)
+			{
+				switch (token.value)
+				{
+				case '-':
+					token.kind = tokens[i].kind = UNARY_OP;
+					token.value = tokens[i].value = NEG;
+					break;
+
+				case '~':
+					token.kind = tokens[i].kind = UNARY_OP;
+					token.value = tokens[i].value = NOT;
+					break;
+				}
+			}
+
 			break;
 
 		case RIGHT_PAREN:
@@ -177,6 +197,7 @@ void scan_for_errors(Token *tokens, int len)
 		if (!valid)
 		{
 			puts("[ERROR] unexpected symbol");
+			printf("%d (%d)\n", token.kind, token.value);
 			for(;;);
 		}
 	}
