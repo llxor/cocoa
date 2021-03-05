@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 
 enum Token_Type
 {

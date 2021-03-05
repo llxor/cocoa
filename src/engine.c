@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "engine.h"
 
 static char prec[128] =
