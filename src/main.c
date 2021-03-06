@@ -8,6 +8,7 @@ int main()
 
 	do
 	{
+		printf("> ");
 		if (fgets(buffer, sizeof buffer, stdin) == NULL)
 		{
 			break;
