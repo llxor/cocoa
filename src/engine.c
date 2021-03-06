@@ -103,17 +103,6 @@ int eval(Queue *tokens)
 	int A = eval(tokens);
 	int B = eval(tokens);
 
-	#ifdef DEBUG
-	switch (token.value)
-	{
-	case NOT: printf("%d ^ %d (= ~%d)\n", B, A, A); break;
-	case NEG: printf("%d - %d (= -%d)\n", B, A, A); break;
-	case SHL: printf("%d << %d\n", B, A); break;
-	case SHR: printf("%d >> %d\n", B, A); break;
-	default:  printf("%d %c %d\n", B, token.value, A);
-	}
-	#endif
-
 	switch (token.value)
 	{
 		case ADD: return B + A;
