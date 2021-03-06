@@ -22,11 +22,15 @@ enum Operator
 	MUL = '*',
 	DIV = '/',
 	MOD = '%',
+	EXP = 'e',
 
 	// BITWISE OPERATORS //
 	AND = '&',
 	 OR = '|',
 	XOR = '^',
+
+	SHL = '<',
+	SHR = '>',
 };
 
 struct Token

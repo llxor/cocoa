@@ -71,8 +71,25 @@ Token parse_token(const char *src, const char **end)
 		case '|':
 		case '^':
 		case '~':
+		case '>':
+		case '<':
 			token.kind = OPERATOR;
 			token.value = *src;
+
+			if (*(src + 1) == *src)
+			{
+				if (*src++ == '*')
+				{
+					token.value = EXP;
+				}
+			}
+
+			else if (*src == '>' || *src == '<')
+			{
+				printf("[ERROR] expected '%c' found '%c'", *src, *(src+1));
+				for(;;);
+			}
+
 			break;
 
 		default:

@@ -6,14 +6,18 @@ static char prec[128] =
 	[ OR] = 1,
 	[XOR] = 1,
 
-	[ADD] = 2,
-	[SUB] = 2,
-	[MUL] = 3,
-	[DIV] = 3,
-	[MOD] = 3,
+	[SHL] = 2,
+	[SHR] = 2,
 
-	[NEG] = 4,
-	[NOT] = 4,
+	[ADD] = 3,
+	[SUB] = 3,
+	[MUL] = 3,
+	[DIV] = 4,
+	[MOD] = 4,
+	[EXP] = 5,
+
+	[NEG] = 6,
+	[NOT] = 6,
 };
 
 Queue convert_to_RPN(Token *tokens, int len)
@@ -69,6 +73,20 @@ Queue convert_to_RPN(Token *tokens, int len)
 	return output;
 }
 
+inline int _exp(int a, int b)
+{
+	int v = 1;
+
+	while (b)
+	{
+		v *= a * (b&1) + (~b&1);
+		a *= a;
+		b >>= 1;
+	}
+
+	return v;
+}
+
 int eval(Queue *tokens)
 {
 	if (tokens->len == 0)
@@ -90,6 +108,8 @@ int eval(Queue *tokens)
 	{
 	case NOT: printf("%d ^ %d (= ~%d)\n", B, A, A); break;
 	case NEG: printf("%d - %d (= -%d)\n", B, A, A); break;
+	case SHL: printf("%d << %d\n", B, A); break;
+	case SHR: printf("%d >> %d\n", B, A); break;
 	default:  printf("%d %c %d\n", B, token.value, A);
 	}
 	#endif
@@ -101,10 +121,14 @@ int eval(Queue *tokens)
 		case MUL: return B * A;
 		case DIV: return B / A;
 		case MOD: return B % A;
+		case EXP: return _exp(B,A);
 
 		case AND: return B & A;
 		case  OR: return B | A;
 		case XOR: return B ^ A;
+
+		case SHL: return B << A;
+		case SHR: return B >> A;
 
 		case NEG: return B - A; // (B =  0) - A; 
 		case NOT: return B ^ A; // (B = -1) ^ A;
