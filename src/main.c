@@ -30,7 +30,9 @@ int main()
 
 		scan_for_errors(tokens, len);
 		Queue RPN = convert_to_RPN(tokens, len);
-		printf("%d\n", eval(&RPN));
+
+		int value = eval(&RPN);
+		printf("int: %10d\nhex: 0x%08X\n", value, value);
 	}
 	while(1);
 
